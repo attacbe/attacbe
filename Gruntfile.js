@@ -248,6 +248,7 @@ module.exports = function (grunt) {
                     src: [
                         '*.{ico,png,txt}',
                         '.htaccess',
+                        'CNAME',
                         'images/{,*/}*.{webp,gif}',
                         'styles/fonts/*'
                     ]
@@ -276,6 +277,20 @@ module.exports = function (grunt) {
                 'svgmin',
                 'htmlmin'
             ]
+        },
+        buildcontrol: {
+            options: {
+                dir: 'dist',
+                commit: true,
+                push: true,
+                message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
+            },
+            pages: {
+                options: {
+                  remote: 'git@github.com:attacbe/attacbe.git',
+                  branch: 'gh-pages'
+                }
+            }
         }
     });
 
@@ -316,5 +331,10 @@ module.exports = function (grunt) {
         'jshint',
         'test',
         'build'
+    ]);
+
+    grunt.registerTask('deploy', [
+      'build',
+      'buildcontrol:pages'
     ]);
 };
